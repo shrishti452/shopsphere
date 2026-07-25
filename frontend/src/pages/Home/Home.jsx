@@ -3,6 +3,8 @@ import { FaArrowRight } from "react-icons/fa";
 import Categories from "../../components/home/Categories/Categories";
 import FeaturedProducts from "../../components/home/FeaturedProducts/FeaturedProducts";
 import OfferBanner from "../../components/home/OfferBanner/OfferBanner";
+import NewArrivals from "../../components/home/NewArrivals/NewArrivals";
+import Footer from "../../components/layout/Footer/Footer";
 
 const Home = () => {
     return (
@@ -42,17 +44,20 @@ const Home = () => {
                 <div className="hero-right">
 
                     <img
-                        src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800"
-                        alt="Fashion"
+                        src="https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                        alt="Fashion Collection"
                     />
 
                 </div>
 
             </section>
-            
+
             <Categories />
             <FeaturedProducts />
             <OfferBanner />
+            <NewArrivals />
+            <Footer />
+
 
         </main>
     );

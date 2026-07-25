@@ -3,6 +3,9 @@
   padding:0;
   box-sizing:border-box;
 }
+html{
+    scroll-behavior:smooth;
+}
 
 html,
 body,
@@ -35,4 +38,8 @@ img{
 button,
 input{
   font:inherit;
+}
+::selection{
+    background:#ff4d6d;
+    color:#fff;
 }
