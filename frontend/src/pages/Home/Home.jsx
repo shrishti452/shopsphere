@@ -1,6 +1,8 @@
 import "./Home.css";
 import { FaArrowRight } from "react-icons/fa";
 import Categories from "../../components/home/Categories/Categories";
+import FeaturedProducts from "../../components/home/FeaturedProducts/FeaturedProducts";
+import OfferBanner from "../../components/home/OfferBanner/OfferBanner";
 
 const Home = () => {
     return (
@@ -49,6 +51,8 @@ const Home = () => {
             </section>
             
             <Categories />
+            <FeaturedProducts />
+            <OfferBanner />
 
         </main>
     );
