@@ -1,0 +1,160 @@
+.home{
+    width:100%;
+}
+
+.hero{
+    width:100%;
+    min-height:calc(100vh - 75px);
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+
+    background:#fff;
+}
+
+.hero-left{
+    max-width:650px;
+    margin-left:auto;
+    padding:0 60px;
+}
+
+.hero-right{
+    width:100%;
+    height:calc(100vh - 75px);
+}
+
+.hero-right img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:0;
+    box-shadow:none;
+}
+
+.tagline{
+    color:#ff4d6d;
+    font-weight:700;
+    letter-spacing:2px;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:4rem;
+    line-height:1.1;
+    color:#222;
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    color:#ff4d6d;
+}
+
+.hero-text{
+    font-size:1.1rem;
+    color:#666;
+    line-height:1.8;
+    max-width:550px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:20px;
+    margin-top:40px;
+}
+
+.shop-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:16px 34px;
+
+    border:none;
+
+    background:#ff4d6d;
+    color:white;
+
+    border-radius:50px;
+
+    font-size:16px;
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.shop-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 25px rgba(255,77,109,.35);
+}
+
+.outline-btn{
+    padding:16px 34px;
+    border:2px solid #ff4d6d;
+    background:white;
+    color:#ff4d6d;
+    border-radius:50px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.outline-btn:hover{
+    background:#ff4d6d;
+    color:white;
+}
+
+.hero-right img{
+    width:100%;
+    border-radius:25px;
+    object-fit:cover;
+    box-shadow:0 20px 45px rgba(0,0,0,.15);
+}
+
+@media(max-width:950px){
+
+.hero{
+grid-template-columns:1fr;
+}
+
+.hero-left{
+max-width:100%;
+padding:50px 25px;
+text-align:center;
+}
+
+.hero-right{
+height:450px;
+}
+
+.hero-text{
+margin:auto;
+}
+
+.hero-buttons{
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.hero h1{
+font-size:3rem;
+}
+
+}
+
+@media(max-width:600px){
+
+.hero h1{
+font-size:2.3rem;
+}
+
+.hero-right{
+height:350px;
+}
+
+.shop-btn,
+.outline-btn{
+width:100%;
+justify-content:center;
+}
+
+}
