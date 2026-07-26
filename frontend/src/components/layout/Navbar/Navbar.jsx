@@ -53,7 +53,7 @@ const Navbar = () => {
                         <span className="badge">{cartItems.length}</span>
                     </Link>
 
-                    <Link to="/profile" className="icon-btn">
+                    <Link to="/login" className="icon-btn">
                         <FaUser />
                     </Link>
 
