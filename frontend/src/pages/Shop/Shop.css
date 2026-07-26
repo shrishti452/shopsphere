@@ -1,0 +1,46 @@
+.shop-page{
+
+    width:90%;
+    max-width:1400px;
+    margin:auto;
+    padding:80px 0;
+
+}
+
+.shop-header{
+
+    text-align:center;
+    margin-bottom:60px;
+
+}
+
+.shop-header h1{
+
+    font-size:3rem;
+    margin-bottom:10px;
+
+}
+
+.shop-header p{
+
+    color:#777;
+
+}
+
+.products-grid{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:35px;
+
+}
+
+@media(max-width:768px){
+
+.shop-header h1{
+
+font-size:2.2rem;
+
+}
+
+}

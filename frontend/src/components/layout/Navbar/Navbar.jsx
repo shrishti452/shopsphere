@@ -26,7 +26,7 @@ const Navbar = () => {
                 {/* Navigation */}
                 <nav className={menuOpen ? "nav-links active" : "nav-links"}>
                     <Link to="/">Home</Link>
-                    <Link to="/products">Shop</Link>
+                    <Link to="/shop">Shop</Link>
                     <Link to="/categories">Categories</Link>
                     <Link to="/wishlist">Wishlist</Link>
                     <Link to="/orders">Orders</Link>
