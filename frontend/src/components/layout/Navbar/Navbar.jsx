@@ -10,9 +10,13 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import { useCart } from "../../../context/CartContext";
+import { useWishlist } from "../../../context/WishlistContext";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { cartItems } = useCart();
+    const { wishlist } = useWishlist();
 
     return (
         <header className="navbar">
@@ -41,12 +45,12 @@ const Navbar = () => {
 
                     <Link to="/wishlist" className="icon-btn">
                         <FaHeart />
-                        <span className="badge">2</span>
+                        <span className="badge">{wishlist.length}</span>
                     </Link>
 
                     <Link to="/cart" className="icon-btn">
                         <FaShoppingCart />
-                        <span className="badge">3</span>
+                        <span className="badge">{cartItems.length}</span>
                     </Link>
 
                     <Link to="/profile" className="icon-btn">
