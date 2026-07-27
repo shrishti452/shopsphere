@@ -3,9 +3,8 @@ from .models import Order, OrderItem
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-
-    product_name = serializers.CharField(
-        source="product.name",
+    product_title = serializers.CharField(
+        source="product.title",
         read_only=True
     )
 
@@ -14,14 +13,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "product",
-            "product_name",
+            "product_title",
             "price",
             "quantity",
         ]
 
 
 class OrderSerializer(serializers.ModelSerializer):
-
     items = OrderItemSerializer(
         many=True,
         read_only=True
