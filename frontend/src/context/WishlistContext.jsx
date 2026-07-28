@@ -1,39 +1,80 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import api from "../api/axios";
 
 const WishlistContext = createContext();
 
 export const useWishlist = () => useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }) => {
-    const [wishlist, setWishlist] = useState(() => {
-        const data = localStorage.getItem("wishlist");
-        return data ? JSON.parse(data) : [];
-    });
+    const [wishlist, setWishlist] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        localStorage.setItem("wishlist", JSON.stringify(wishlist));
-    }, [wishlist]);
+    const isLoggedIn = () => !!localStorage.getItem("access");
 
-    const toggleWishlist = (product) => {
-        const exists = wishlist.find((item) => item.id === product.id);
+    const fetchWishlist = async () => {
+        if (!isLoggedIn()) {
+            setWishlist([]);
+            setLoading(false);
+            return;
+        }
 
-        if (exists) {
-            setWishlist(wishlist.filter((item) => item.id !== product.id));
-        } else {
-            setWishlist([...wishlist, product]);
+        try {
+            const res = await api.get("wishlist/");
+            setWishlist(res.data);
+        } catch (err) {
+            console.error("Wishlist fetch failed", err);
+            setWishlist([]);
+        } finally {
+            setLoading(false);
         }
     };
 
-    const isInWishlist = (id) => {
-        return wishlist.some((item) => item.id === id);
+    useEffect(() => {
+        fetchWishlist();
+    }, []);
+
+    const toggleWishlist = async (product) => {
+        if (!isLoggedIn()) {
+            alert("Please login first.");
+            return;
+        }
+
+        const existing = wishlist.find(
+            (item) => item.product.id === product.id
+        );
+
+        try {
+            if (existing) {
+                await api.delete(`wishlist/delete/${existing.id}/`);
+                setWishlist((prev) =>
+                    prev.filter((item) => item.id !== existing.id)
+                );
+            } else {
+                const res = await api.post(
+                    `wishlist/add/${product.id}/`
+                );
+
+                await fetchWishlist();
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const isInWishlist = (productId) => {
+        return wishlist.some(
+            (item) => item.product.id === productId
+        );
     };
 
     return (
         <WishlistContext.Provider
             value={{
                 wishlist,
+                loading,
                 toggleWishlist,
                 isInWishlist,
+                fetchWishlist,
             }}
         >
             {children}
