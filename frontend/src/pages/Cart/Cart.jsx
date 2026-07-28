@@ -1,5 +1,6 @@
 import "./Cart.css";
 import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
     const {
@@ -8,7 +9,9 @@ const Cart = () => {
         increaseQty,
         decreaseQty,
         removeFromCart,
+        checkoutCart,
     } = useCart();
+    const navigate = useNavigate();
 
     if (loading) {
         return (
@@ -22,6 +25,17 @@ const Cart = () => {
         (total, item) => total + Number(item.product.price) * item.quantity,
         0
     );
+
+    const handleCheckout = async () => {
+        const success = await checkoutCart();
+
+        if (success) {
+            alert("Order placed successfully.");
+            navigate("/orders");
+        } else {
+            alert("Checkout failed.");
+        }
+    };
 
     return (
         <div className="cart-page">
@@ -71,6 +85,13 @@ const Cart = () => {
 
                     <div className="cart-total">
                         <h2>Total : ₹{subtotal.toFixed(2)}</h2>
+
+                        <button
+                            className="checkout-btn"
+                            onClick={handleCheckout}
+                        >
+                            Proceed to Checkout
+                        </button>
                     </div>
                 </>
             )}

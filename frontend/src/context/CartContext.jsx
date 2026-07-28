@@ -5,6 +5,7 @@ import {
     updateCartAPI,
     deleteCartAPI,
 } from "../services/cartService";
+import { checkout } from "../services/orderService";
 
 const CartContext = createContext();
 
@@ -76,6 +77,17 @@ export const CartProvider = ({ children }) => {
         }
     };
 
+    const checkoutCart = async () => {
+        try {
+            await checkout();
+            await fetchCart();
+            return true;
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+    };
+
     return (
         <CartContext.Provider
             value={{
@@ -86,6 +98,7 @@ export const CartProvider = ({ children }) => {
                 increaseQty,
                 decreaseQty,
                 removeFromCart,
+                checkoutCart,
             }}
         >
             {children}
