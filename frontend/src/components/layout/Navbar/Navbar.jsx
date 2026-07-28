@@ -50,7 +50,9 @@ const Navbar = () => {
 
                     <Link to="/cart" className="icon-btn">
                         <FaShoppingCart />
-                        <span className="badge">{cartItems.length}</span>
+                        <span className="badge">
+                            {cartItems.reduce((total, item) => total + item.quantity, 0)}
+                        </span>
                     </Link>
 
                     <Link to="/login" className="icon-btn">

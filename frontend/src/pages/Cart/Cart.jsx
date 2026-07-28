@@ -2,28 +2,29 @@ import "./Cart.css";
 import { useCart } from "../../context/CartContext";
 
 const Cart = () => {
-    const { cartItems, addToCart, removeFromCart } = useCart();
+    const {
+        cartItems,
+        loading,
+        increaseQty,
+        decreaseQty,
+        removeFromCart,
+    } = useCart();
 
-    const decreaseQty = (item) => {
-        if (item.quantity === 1) {
-            removeFromCart(item.id);
-            return;
-        }
-
-        item.quantity -= 1;
-
-        localStorage.setItem("cart", JSON.stringify([...cartItems]));
-        window.location.reload();
-    };
+    if (loading) {
+        return (
+            <div className="cart-page">
+                <h2>Loading...</h2>
+            </div>
+        );
+    }
 
     const subtotal = cartItems.reduce(
-        (total, item) => total + item.price * item.quantity,
+        (total, item) => total + Number(item.product.price) * item.quantity,
         0
     );
 
     return (
         <div className="cart-page">
-
             <h1>Shopping Cart</h1>
 
             {cartItems.length === 0 ? (
@@ -32,25 +33,30 @@ const Cart = () => {
                 <>
                     {cartItems.map((item) => (
                         <div className="cart-item" key={item.id}>
-                            <img src={item.image} alt={item.title} />
+                            <img
+                                src={item.product.image}
+                                alt={item.product.title}
+                            />
 
                             <div className="cart-info">
-                                <h3>{item.title}</h3>
+                                <h3>{item.product.title}</h3>
 
-                                <p>${item.price}</p>
+                                <p>₹{item.product.price}</p>
 
                                 <div className="qty">
-
-                                    <button onClick={() => decreaseQty(item)}>
+                                    <button
+                                        onClick={() => decreaseQty(item)}
+                                    >
                                         -
                                     </button>
 
                                     <span>{item.quantity}</span>
 
-                                    <button onClick={() => addToCart(item)}>
+                                    <button
+                                        onClick={() => increaseQty(item)}
+                                    >
                                         +
                                     </button>
-
                                 </div>
                             </div>
 
@@ -64,7 +70,7 @@ const Cart = () => {
                     ))}
 
                     <div className="cart-total">
-                        <h2>Total : ${subtotal}</h2>
+                        <h2>Total : ₹{subtotal.toFixed(2)}</h2>
                     </div>
                 </>
             )}

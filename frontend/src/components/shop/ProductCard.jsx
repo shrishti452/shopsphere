@@ -1,12 +1,12 @@
 import "./ProductCard.css";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
-import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
     const { addToCart } = useCart();
-
     const { toggleWishlist, isInWishlist } = useWishlist();
 
     return (
@@ -25,7 +25,11 @@ const ProductCard = ({ product }) => {
                             toggleWishlist(product);
                         }}
                     >
-                        {isInWishlist(product.id) ? <FaHeart /> : <FaRegHeart />}
+                        {isInWishlist(product.id) ? (
+                            <FaHeart />
+                        ) : (
+                            <FaRegHeart />
+                        )}
                     </button>
                 </div>
 
@@ -34,7 +38,7 @@ const ProductCard = ({ product }) => {
 
                     <h3>{product.title}</h3>
 
-                    <h4>${product.price}</h4>
+                    <h4>₹{product.price}</h4>
                 </div>
             </Link>
 
