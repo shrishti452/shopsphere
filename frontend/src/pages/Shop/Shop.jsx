@@ -1,13 +1,37 @@
 import { useMemo, useState } from "react";
 import "./Shop.css";
 import ProductCard from "../../components/shop/ProductCard";
-import products from "../../data/products";
+import { useEffect } from "react";
+import { getProducts } from "../../services/productService";
 import { FaSearch, FaFilter } from "react-icons/fa";
 
 const Shop = () => {
+    const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("All");
     const [sort, setSort] = useState("default");
+
+    useEffect(() => {
+
+        const fetchProducts = async () => {
+
+            try {
+
+                const data = await getProducts();
+                setProducts(data);
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+        fetchProducts();
+
+    }, []);
+
 
     const categories = [
         "All",
