@@ -21,13 +21,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem("access");
-        localStorage.removeItem("refresh");
-        setIsAuthenticated(false);
-
-        // Refresh the app state
-        window.location.href = "/login";
-    };
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    setIsAuthenticated(false);
+};
 
     return (
         <AuthContext.Provider

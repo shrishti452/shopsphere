@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/axios";
+import { toast } from "react-toastify";
 
 const WishlistContext = createContext();
 
@@ -35,10 +36,9 @@ export const WishlistProvider = ({ children }) => {
 
     const toggleWishlist = async (product) => {
         if (!isLoggedIn()) {
-            alert("Please login first.");
+            toast.error("Please login first.");
             return;
         }
-
         try {
 
             const latest = await api.get("wishlist/");
@@ -48,19 +48,20 @@ export const WishlistProvider = ({ children }) => {
             );
 
             if (existing) {
+                await api.delete(`wishlist/delete/${existing.id}/`);
 
-                await api.delete(
-                    `wishlist/delete/${existing.id}/`
+                setWishlist((prev) =>
+                    prev.filter((item) => item.id !== existing.id)
                 );
 
+                toast.info("Removed from wishlist");
             } else {
+                await api.post(`wishlist/add/${product.id}/`);
 
-                await api.post(
-                    `wishlist/add/${product.id}/`
-                );
+                await fetchWishlist();
 
+                toast.success("Added to wishlist");
             }
-
             await fetchWishlist();
 
         } catch (err) {

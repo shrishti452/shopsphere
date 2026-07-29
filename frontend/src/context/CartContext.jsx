@@ -6,6 +6,7 @@ import {
     deleteCartAPI,
 } from "../services/cartService";
 import { checkout } from "../services/orderService";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
 
@@ -39,9 +40,12 @@ export const CartProvider = ({ children }) => {
     const addToCart = async (product) => {
         try {
             await addToCartAPI(product.id);
-            fetchCart();
+            await fetchCart();
+
+            toast.success("Added to cart");
         } catch (err) {
             console.error(err);
+            toast.error("Failed to add to cart");
         }
     };
 

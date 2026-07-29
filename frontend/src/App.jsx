@@ -12,24 +12,71 @@ import Orders from "./pages/Orders/Orders";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Profile from "./pages/Profile/Profile";
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Navbar />
+import PrivateRoute from "./routes/PrivateRoute";
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </BrowserRouter>
-  );
+function App() {
+    return (
+        <BrowserRouter>
+            <Navbar />
+
+            <Routes>
+                <Route path="/" element={<Home />} />
+
+                <Route path="/shop" element={<Shop />} />
+
+                <Route
+                    path="/cart"
+                    element={
+                        <PrivateRoute>
+                            <Cart />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path="/wishlist"
+                    element={
+                        <PrivateRoute>
+                            <Wishlist />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path="/orders"
+                    element={
+                        <PrivateRoute>
+                            <Orders />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path="/profile"
+                    element={
+                        <PrivateRoute>
+                            <Profile />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path="/product/:id"
+                    element={<ProductDetails />}
+                />
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/signup"
+                    element={<Signup />}
+                />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

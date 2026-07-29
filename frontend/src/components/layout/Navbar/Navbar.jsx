@@ -9,7 +9,7 @@ import {
     FaTimes,
     FaSignOutAlt,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Navbar.css";
 
@@ -20,9 +20,16 @@ import { useAuth } from "../../../context/AuthContext";
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
+    const navigate = useNavigate();
+
     const { cartItems } = useCart();
     const { wishlist } = useWishlist();
     const { isAuthenticated, logout } = useAuth();
+
+    const handleLogout = () => {
+    logout();
+    navigate("/", { replace: true });
+};
 
     return (
         <header className="navbar">
@@ -71,7 +78,7 @@ const Navbar = () => {
 
                             <button
                                 className="icon-btn"
-                                onClick={logout}
+                                onClick={handleLogout}
                                 title="Logout"
                             >
                                 <FaSignOutAlt />

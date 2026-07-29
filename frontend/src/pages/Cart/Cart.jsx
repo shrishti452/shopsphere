@@ -1,6 +1,7 @@
 import "./Cart.css";
 import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Cart = () => {
     const {
@@ -27,15 +28,15 @@ const Cart = () => {
     );
 
     const handleCheckout = async () => {
-        const success = await checkoutCart();
+    const success = await checkoutCart();
 
-        if (success) {
-            alert("Order placed successfully.");
-            navigate("/orders");
-        } else {
-            alert("Checkout failed.");
-        }
-    };
+    if (success) {
+        toast.success("Order placed successfully!");
+        navigate("/orders");
+    } else {
+        toast.error("Checkout failed!");
+    }
+};
 
     return (
         <div className="cart-page">
