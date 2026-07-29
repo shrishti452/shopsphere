@@ -41,6 +41,7 @@ const Login = () => {
         try {
 
             const response = await api.post("accounts/login/", formData);
+            localStorage.setItem("username", formData.username);
 
             login(
                 response.data.access,

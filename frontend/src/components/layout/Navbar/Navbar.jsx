@@ -16,6 +16,7 @@ import "./Navbar.css";
 import { useCart } from "../../../context/CartContext";
 import { useWishlist } from "../../../context/WishlistContext";
 import { useAuth } from "../../../context/AuthContext";
+import { useSearch } from "../../../context/SearchContext";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -26,10 +27,12 @@ const Navbar = () => {
     const { wishlist } = useWishlist();
     const { isAuthenticated, logout } = useAuth();
 
+    const { search, setSearch } = useSearch();
+
     const handleLogout = () => {
-    logout();
-    navigate("/", { replace: true });
-};
+        logout();
+        navigate("/", { replace: true });
+    };
 
     return (
         <header className="navbar">
@@ -49,9 +52,16 @@ const Navbar = () => {
 
                 <div className="nav-icons">
 
-                    <button className="icon-btn">
+                    <div className="search-box">
                         <FaSearch />
-                    </button>
+
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
 
                     <Link to="/wishlist" className="icon-btn">
                         <FaHeart />

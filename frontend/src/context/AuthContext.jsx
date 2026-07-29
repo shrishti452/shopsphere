@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
+    localStorage.removeItem("username");
     setIsAuthenticated(false);
 };
 

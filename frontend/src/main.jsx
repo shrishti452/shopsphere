@@ -4,9 +4,10 @@ import "./index.css";
 
 import App from "./App.jsx";
 
+import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
-import { AuthProvider } from "./context/AuthContext";
+import { SearchProvider } from "./context/SearchContext";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,22 +15,26 @@ import "react-toastify/dist/ReactToastify.css";
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         <AuthProvider>
-            <WishlistProvider>
-                <CartProvider>
-                    <App />
+            <SearchProvider>
+                <WishlistProvider>
+                    <CartProvider>
 
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={2000}
-                        hideProgressBar={false}
-                        newestOnTop
-                        closeOnClick
-                        pauseOnHover
-                        draggable
-                        theme="colored"
-                    />
-                </CartProvider>
-            </WishlistProvider>
+                        <App />
+
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={2000}
+                            hideProgressBar={false}
+                            newestOnTop
+                            closeOnClick
+                            pauseOnHover
+                            draggable
+                            theme="colored"
+                        />
+
+                    </CartProvider>
+                </WishlistProvider>
+            </SearchProvider>
         </AuthProvider>
     </StrictMode>
 );
