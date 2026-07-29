@@ -24,3 +24,35 @@
 .empty-orders {
     font-size: 18px;
 }
+
+.order-items{
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.order-item{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:15px;
+    border:1px solid #eee;
+    border-radius:10px;
+}
+
+.order-item img{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.order-item h4{
+    margin-bottom:8px;
+}
+
+.order-item p{
+    margin:4px 0;
+    color:#666;
+}

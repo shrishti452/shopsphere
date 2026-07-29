@@ -1,38 +1,28 @@
 import "./NewArrivals.css";
-import { FaHeart, FaShoppingBag } from "react-icons/fa";
-
-const arrivals = [
-    {
-        id: 1,
-        name: "Oversized T-Shirt",
-        price: "₹999",
-        image:
-            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700",
-    },
-    {
-        id: 2,
-        name: "Denim Jacket",
-        price: "₹2,299",
-        image:
-            "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=700",
-    },
-    {
-        id: 3,
-        name: "Women's Dress",
-        price: "₹1,799",
-        image:
-            "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=700",
-    },
-    {
-        id: 4,
-        name: "White Sneakers",
-        price: "₹3,499",
-        image:
-            "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700",
-    },
-];
+import { useEffect, useState } from "react";
+import { getProducts } from "../../../services/productService";
+import ProductCard from "../../shop/ProductCard";
 
 const NewArrivals = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await getProducts();
+
+                setProducts(data.slice(-4).reverse());
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
     return (
         <section className="arrivals">
             <div className="section-title">
@@ -40,29 +30,18 @@ const NewArrivals = () => {
                 <p>Fresh fashion just landed.</p>
             </div>
 
-            <div className="arrival-grid">
-                {arrivals.map((item) => (
-                    <div className="arrival-card" key={item.id}>
-                        <span className="new-badge">NEW</span>
-
-                        <button className="arrival-heart">
-                            <FaHeart />
-                        </button>
-
-                        <img src={item.image} alt={item.name} />
-
-                        <div className="arrival-info">
-                            <h3>{item.name}</h3>
-                            <h4>{item.price}</h4>
-
-                            <button>
-                                <FaShoppingBag />
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {loading ? (
+                <h3>Loading...</h3>
+            ) : (
+                <div className="products-grid">
+                    {products.map((product) => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                        />
+                    ))}
+                </div>
+            )}
         </section>
     );
 };

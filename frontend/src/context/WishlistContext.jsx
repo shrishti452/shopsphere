@@ -39,25 +39,34 @@ export const WishlistProvider = ({ children }) => {
             return;
         }
 
-        const existing = wishlist.find(
-            (item) => item.product.id === product.id
-        );
-
         try {
+
+            const latest = await api.get("wishlist/");
+
+            const existing = latest.data.find(
+                (item) => item.product.id === product.id
+            );
+
             if (existing) {
-                await api.delete(`wishlist/delete/${existing.id}/`);
-                setWishlist((prev) =>
-                    prev.filter((item) => item.id !== existing.id)
+
+                await api.delete(
+                    `wishlist/delete/${existing.id}/`
                 );
+
             } else {
-                const res = await api.post(
+
+                await api.post(
                     `wishlist/add/${product.id}/`
                 );
 
-                await fetchWishlist();
             }
+
+            await fetchWishlist();
+
         } catch (err) {
+
             console.error(err);
+
         }
     };
 

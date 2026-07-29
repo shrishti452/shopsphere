@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../../api/axios";
 import "./Orders.css";
+import { getOrders } from "../../services/orderService";
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -9,10 +9,10 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await api.get("orders/");
-                setOrders(response.data);
-            } catch (error) {
-                console.error("Orders fetch failed", error);
+                const data = await getOrders();
+                setOrders(data);
+            } catch (err) {
+                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -22,46 +22,78 @@ const Orders = () => {
     }, []);
 
     if (loading) {
-        return <h2 className="orders-loading">Loading Orders...</h2>;
+        return (
+            <div className="orders-page">
+                <h2>Loading...</h2>
+            </div>
+        );
     }
 
     return (
         <section className="orders-page">
-
             <h1>My Orders</h1>
 
             {orders.length === 0 ? (
-                <p className="empty-orders">
-                    No orders found.
-                </p>
+                <h2 className="empty-orders">
+                    No Orders Found
+                </h2>
             ) : (
                 <div className="orders-container">
-
                     {orders.map((order) => (
-                        <div className="order-card" key={order.id}>
+                        <div
+                            className="order-card"
+                            key={order.id}
+                        >
+                            <div className="order-header">
+                                <h2>Order #{order.id}</h2>
+
+                                <span>{order.status}</span>
+                            </div>
+
+                            <p>
+                                Date:{" "}
+                                {new Date(
+                                    order.created_at
+                                ).toLocaleDateString()}
+                            </p>
+
+                            <div className="order-items">
+                                {order.items.length > 0 ? (
+                                    order.items.map((item) => (
+                                        <div
+                                            className="order-item"
+                                            key={item.id}
+                                        >
+                                            <img
+                                                src={item.product.image}
+                                                alt={item.product.title}
+                                            />
+
+                                            <div>
+                                                <h4>{item.product.title}</h4>
+
+                                                <p>
+                                                    Qty: {item.quantity}
+                                                </p>
+
+                                                <p>
+                                                    ₹{item.price}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No items found.</p>
+                                )}
+                            </div>
 
                             <h3>
-                                Order #{order.id}
-                            </h3>
-
-                            <p>
-                                Status: {order.status}
-                            </p>
-
-                            <p>
                                 Total: ₹{order.total_price}
-                            </p>
-
-                            <p>
-                                Date: {new Date(order.created_at).toLocaleDateString()}
-                            </p>
-
+                            </h3>
                         </div>
                     ))}
-
                 </div>
             )}
-
         </section>
     );
 };
