@@ -6,9 +6,13 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
+        checkAuth();
+    }, []);
+
+    const checkAuth = () => {
         const token = localStorage.getItem("access");
         setIsAuthenticated(!!token);
-    }, []);
+    };
 
     const login = (access, refresh) => {
         localStorage.setItem("access", access);
@@ -20,6 +24,9 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
         setIsAuthenticated(false);
+
+        // Refresh the app state
+        window.location.href = "/login";
     };
 
     return (
@@ -28,6 +35,7 @@ export const AuthProvider = ({ children }) => {
                 isAuthenticated,
                 login,
                 logout,
+                checkAuth,
             }}
         >
             {children}
