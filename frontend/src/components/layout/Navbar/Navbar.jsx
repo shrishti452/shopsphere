@@ -9,17 +9,20 @@ import {
     FaTimes,
     FaSignOutAlt,
 } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+} from "react-router-dom";
 
 import "./Navbar.css";
 
 import { useCart } from "../../../context/CartContext";
 import { useWishlist } from "../../../context/WishlistContext";
 import { useAuth } from "../../../context/AuthContext";
-import { useSearch } from "../../../context/SearchContext";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [search, setSearch] = useState("");
 
     const navigate = useNavigate();
 
@@ -27,11 +30,21 @@ const Navbar = () => {
     const { wishlist } = useWishlist();
     const { isAuthenticated, logout } = useAuth();
 
-    const { search, setSearch } = useSearch();
-
     const handleLogout = () => {
         logout();
         navigate("/", { replace: true });
+    };
+
+    const handleSearch = (e) => {
+        if (e.key === "Enter") {
+            if (search.trim()) {
+                navigate(
+                    `/shop?search=${encodeURIComponent(search)}`
+                );
+            } else {
+                navigate("/shop");
+            }
+        }
     };
 
     return (
@@ -57,9 +70,10 @@ const Navbar = () => {
 
                         <input
                             type="text"
-                            placeholder="Search..."
+                            placeholder="Search products..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
+                            onKeyDown={handleSearch}
                         />
                     </div>
 
@@ -82,7 +96,10 @@ const Navbar = () => {
 
                     {isAuthenticated ? (
                         <>
-                            <Link to="/profile" className="icon-btn">
+                            <Link
+                                to="/profile"
+                                className="icon-btn"
+                            >
                                 <FaUser />
                             </Link>
 
@@ -95,16 +112,25 @@ const Navbar = () => {
                             </button>
                         </>
                     ) : (
-                        <Link to="/login" className="icon-btn">
+                        <Link
+                            to="/login"
+                            className="icon-btn"
+                        >
                             <FaUser />
                         </Link>
                     )}
 
                     <button
                         className="menu-btn"
-                        onClick={() => setMenuOpen(!menuOpen)}
+                        onClick={() =>
+                            setMenuOpen(!menuOpen)
+                        }
                     >
-                        {menuOpen ? <FaTimes /> : <FaBars />}
+                        {menuOpen ? (
+                            <FaTimes />
+                        ) : (
+                            <FaBars />
+                        )}
                     </button>
 
                 </div>
