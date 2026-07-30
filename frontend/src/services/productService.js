@@ -1,7 +1,10 @@
 import api from "../api/axios";
 
-export const getProducts = async () => {
-    const response = await api.get("products/");
+export const getProducts = async (page = 1) => {
+    const response = await api.get(`products/?page=${page}`);
+
+    console.log("PRODUCT SERVICE RESPONSE:", response.data);
+
     return response.data;
 };
 

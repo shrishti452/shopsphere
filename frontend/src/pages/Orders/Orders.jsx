@@ -10,9 +10,13 @@ const Orders = () => {
         const fetchOrders = async () => {
             try {
                 const data = await getOrders();
-                setOrders(data);
+
+                // DRF Pagination Support
+                setOrders(data.results || []);
+
             } catch (err) {
                 console.error(err);
+                setOrders([]);
             } finally {
                 setLoading(false);
             }
@@ -58,7 +62,7 @@ const Orders = () => {
                             </p>
 
                             <div className="order-items">
-                                {order.items.length > 0 ? (
+                                {(order.items || []).length > 0 ? (
                                     order.items.map((item) => (
                                         <div
                                             className="order-item"

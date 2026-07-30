@@ -19,7 +19,7 @@ export const CartProvider = ({ children }) => {
     const fetchCart = async () => {
         try {
             const data = await getCart();
-            setCartItems(data);
+            setCartItems(data.results || []);
         } catch (err) {
             console.error(err);
         } finally {

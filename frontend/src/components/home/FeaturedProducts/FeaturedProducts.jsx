@@ -11,7 +11,9 @@ const FeaturedProducts = () => {
         const fetchProducts = async () => {
             try {
                 const data = await getProducts();
-                setProducts(data.slice(0, 4));
+
+                setProducts(data.results.slice(0, 4));
+
             } catch (error) {
                 console.error(error);
             } finally {

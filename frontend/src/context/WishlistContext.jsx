@@ -21,7 +21,9 @@ export const WishlistProvider = ({ children }) => {
 
         try {
             const res = await api.get("wishlist/");
-            setWishlist(res.data);
+
+            setWishlist(res.data.results || []);
+
         } catch (err) {
             console.error("Wishlist fetch failed", err);
             setWishlist([]);
@@ -39,35 +41,30 @@ export const WishlistProvider = ({ children }) => {
             toast.error("Please login first.");
             return;
         }
-        try {
 
+        try {
             const latest = await api.get("wishlist/");
 
-            const existing = latest.data.find(
+            const list = latest.data.results || [];
+
+            const existing = list.find(
                 (item) => item.product.id === product.id
             );
 
             if (existing) {
                 await api.delete(`wishlist/delete/${existing.id}/`);
 
-                setWishlist((prev) =>
-                    prev.filter((item) => item.id !== existing.id)
-                );
-
                 toast.info("Removed from wishlist");
             } else {
                 await api.post(`wishlist/add/${product.id}/`);
 
-                await fetchWishlist();
-
                 toast.success("Added to wishlist");
             }
+
             await fetchWishlist();
 
         } catch (err) {
-
             console.error(err);
-
         }
     };
 

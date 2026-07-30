@@ -12,7 +12,12 @@ const NewArrivals = () => {
             try {
                 const data = await getProducts();
 
-                setProducts(data.slice(-4).reverse());
+                setProducts(
+                    data.results
+                        .slice(-4)
+                        .reverse()
+                );
+
             } catch (error) {
                 console.error(error);
             } finally {

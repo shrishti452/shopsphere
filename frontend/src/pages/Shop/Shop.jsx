@@ -8,6 +8,8 @@ import { getProducts } from "../../services/productService";
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
+    const [count, setCount] = useState(0);
+    const [page, setPage] = useState(1);
 
     const [searchParams] = useSearchParams();
 
@@ -21,15 +23,19 @@ const Shop = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const data = await getProducts();
-                setProducts(data);
+                const data = await getProducts(page);
+
+                setProducts(data.results);
+                setCount(data.count);
+
             } catch (error) {
                 console.error(error);
             }
         };
 
         fetchProducts();
-    }, []);
+
+    }, [page]);
 
     useEffect(() => {
         setSearch(searchParams.get("search") || "");
@@ -41,6 +47,7 @@ const Shop = () => {
     ];
 
     const filteredProducts = useMemo(() => {
+
         let data = [...products];
 
         if (category !== "All") {
@@ -50,6 +57,7 @@ const Shop = () => {
         }
 
         if (search.trim()) {
+
             const value = search.toLowerCase();
 
             data = data.filter(
@@ -58,9 +66,11 @@ const Shop = () => {
                     item.category.toLowerCase().includes(value) ||
                     item.brand.toLowerCase().includes(value)
             );
+
         }
 
         switch (sort) {
+
             case "low":
                 data.sort((a, b) => a.price - b.price);
                 break;
@@ -77,19 +87,21 @@ const Shop = () => {
 
             default:
                 break;
+
         }
 
         return data;
+
     }, [products, search, category, sort]);
+
+    const totalPages = Math.ceil(count / 8);
 
     return (
         <section className="shop-page">
 
             <div className="shop-header">
                 <h1>Shop Collection</h1>
-                <p>
-                    Premium Fashion For Every Occasion
-                </p>
+                <p>Premium Fashion For Every Occasion</p>
             </div>
 
             <div className="shop-layout">
@@ -106,6 +118,7 @@ const Shop = () => {
                         <label>Search</label>
 
                         <div className="search-box">
+
                             <FaSearch />
 
                             <input
@@ -132,10 +145,7 @@ const Shop = () => {
                             }
                         >
                             {categories.map((item) => (
-                                <option
-                                    key={item}
-                                    value={item}
-                                >
+                                <option key={item}>
                                     {item}
                                 </option>
                             ))}
@@ -177,32 +187,69 @@ const Shop = () => {
 
                 <div className="shop-content">
 
+                    <p className="product-count">
+                        Showing {filteredProducts.length} of {count} Products
+                    </p>
+
                     {filteredProducts.length === 0 ? (
 
-                        <div
-                            style={{
-                                textAlign: "center",
-                                padding: "80px 20px",
-                                fontSize: "22px",
-                                fontWeight: "600",
-                            }}
-                        >
+                        <div className="no-products">
                             No products found.
                         </div>
 
                     ) : (
 
-                        <div className="products-grid">
+                        <>
+                            <div className="products-grid">
 
-                            {filteredProducts.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                />
-                            ))}
+                                {filteredProducts.map((product) => (
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                    />
+                                ))}
 
-                        </div>
+                            </div>
 
+                            <div className="pagination">
+
+                                <button
+                                    disabled={page === 1}
+                                    onClick={() => setPage(page - 1)}
+                                >
+                                    Previous
+                                </button>
+
+                                {Array.from(
+                                    { length: totalPages },
+                                    (_, i) => (
+                                        <button
+                                            key={i + 1}
+                                            className={
+                                                page === i + 1
+                                                    ? "active-page"
+                                                    : ""
+                                            }
+                                            onClick={() =>
+                                                setPage(i + 1)
+                                            }
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    )
+                                )}
+
+                                <button
+                                    disabled={page === totalPages}
+                                    onClick={() =>
+                                        setPage(page + 1)
+                                    }
+                                >
+                                    Next
+                                </button>
+
+                            </div>
+                        </>
                     )}
 
                 </div>

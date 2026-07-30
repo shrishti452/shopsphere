@@ -4,9 +4,11 @@ from .serializers import ProductSerializer
 
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.all().order_by("-id")
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return Product.objects.all().order_by("-id")
 
 
 class ProductDetailView(generics.RetrieveAPIView):
