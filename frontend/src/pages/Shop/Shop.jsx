@@ -5,11 +5,13 @@ import { FaSearch, FaFilter } from "react-icons/fa";
 import "./Shop.css";
 import ProductCard from "../../components/shop/ProductCard";
 import { getProducts } from "../../services/productService";
+import SkeletonCard from "../../components/common/SkeletonCard";
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
 
     const [searchParams] = useSearchParams();
 
@@ -22,14 +24,18 @@ const Shop = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
+            setLoading(true);
+
             try {
                 const data = await getProducts(page);
 
-                setProducts(data.results);
-                setCount(data.count);
+                setProducts(data.results || []);
+                setCount(data.count || 0);
 
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -95,6 +101,18 @@ const Shop = () => {
     }, [products, search, category, sort]);
 
     const totalPages = Math.ceil(count / 8);
+
+    if (loading) {
+        return (
+            <section className="shop-page">
+                <div className="products-grid">
+                    {[...Array(8)].map((_, i) => (
+                        <SkeletonCard key={i} />
+                    ))}
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="shop-page">

@@ -2,6 +2,7 @@ import "./FeaturedProducts.css";
 import { useEffect, useState } from "react";
 import { getProducts } from "../../../services/productService";
 import ProductCard from "../../shop/ProductCard";
+import SkeletonCard from "../../common/SkeletonCard";
 
 const FeaturedProducts = () => {
     const [products, setProducts] = useState([]);
@@ -32,7 +33,11 @@ const FeaturedProducts = () => {
             </div>
 
             {loading ? (
-                <h3>Loading...</h3>
+                <div className="products-grid">
+                    {[...Array(4)].map((_, i) => (
+                        <SkeletonCard key={i} />
+                    ))}
+                </div>
             ) : (
                 <div className="products-grid">
                     {products.map((product) => (
