@@ -11,7 +11,7 @@ import Signup from "./pages/Auth/Signup";
 import Orders from "./pages/Orders/Orders";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Profile from "./pages/Profile/Profile";
-
+import NotFound from "./pages/NotFound/NotFound";
 import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
@@ -74,6 +74,7 @@ function App() {
                     path="/signup"
                     element={<Signup />}
                 />
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
     );
