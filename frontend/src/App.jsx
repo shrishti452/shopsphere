@@ -13,12 +13,13 @@ import Wishlist from "./pages/Wishlist/Wishlist";
 import Profile from "./pages/Profile/Profile";
 import NotFound from "./pages/NotFound/NotFound";
 import PrivateRoute from "./routes/PrivateRoute";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 function App() {
     return (
         <BrowserRouter>
             <Navbar />
-
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<Home />} />
 
