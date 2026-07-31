@@ -1,29 +1,55 @@
 import { useEffect, useState } from "react";
 import "./Orders.css";
-import { getOrders } from "../../services/orderService";
+import {
+    getOrders,
+    cancelOrder,
+} from "../../services/orderService";
+import { toast } from "react-toastify";
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const fetchOrders = async () => {
+        try {
+            const data = await getOrders();
+            setOrders(data.results || []);
+        } catch (err) {
+            console.error(err);
+            setOrders([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const data = await getOrders();
-
-                // DRF Pagination Support
-                setOrders(data.results || []);
-
-            } catch (err) {
-                console.error(err);
-                setOrders([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchOrders();
     }, []);
+
+    const handleCancel = async (id) => {
+        try {
+            const updatedOrder = await cancelOrder(id);
+
+            setOrders((prev) =>
+                prev.map((order) =>
+                    order.id === id
+                        ? updatedOrder
+                        : order
+                )
+            );
+
+            toast.success(
+                "Order cancelled successfully."
+            );
+        } catch (err) {
+            console.error(err);
+
+            toast.error(
+                err.response?.data?.message ||
+                "Unable to cancel order."
+            );
+        }
+    };
 
     if (loading) {
         return (
@@ -49,9 +75,15 @@ const Orders = () => {
                             key={order.id}
                         >
                             <div className="order-header">
-                                <h2>Order #{order.id}</h2>
+                                <h2>
+                                    Order #{order.id}
+                                </h2>
 
-                                <span>{order.status}</span>
+                                <span
+                                    className={`status ${order.status.toLowerCase()}`}
+                                >
+                                    {order.status}
+                                </span>
                             </div>
 
                             <p>
@@ -62,38 +94,79 @@ const Orders = () => {
                             </p>
 
                             <div className="order-items">
-                                {(order.items || []).length > 0 ? (
-                                    order.items.map((item) => (
-                                        <div
-                                            className="order-item"
-                                            key={item.id}
-                                        >
-                                            <img
-                                                src={item.product.image}
-                                                alt={item.product.title}
-                                            />
+                                {(order.items || [])
+                                    .length > 0 ? (
+                                    order.items.map(
+                                        (item) => (
+                                            <div
+                                                className="order-item"
+                                                key={
+                                                    item.id
+                                                }
+                                            >
+                                                <img
+                                                    src={
+                                                        item
+                                                            .product
+                                                            .image
+                                                    }
+                                                    alt={
+                                                        item
+                                                            .product
+                                                            .title
+                                                    }
+                                                />
 
-                                            <div>
-                                                <h4>{item.product.title}</h4>
+                                                <div>
+                                                    <h4>
+                                                        {
+                                                            item
+                                                                .product
+                                                                .title
+                                                        }
+                                                    </h4>
 
-                                                <p>
-                                                    Qty: {item.quantity}
-                                                </p>
+                                                    <p>
+                                                        Qty:{" "}
+                                                        {
+                                                            item.quantity
+                                                        }
+                                                    </p>
 
-                                                <p>
-                                                    ₹{item.price}
-                                                </p>
+                                                    <p>
+                                                        ₹
+                                                        {
+                                                            item.price
+                                                        }
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
+                                        )
+                                    )
                                 ) : (
-                                    <p>No items found.</p>
+                                    <p>
+                                        No items
+                                        found.
+                                    </p>
                                 )}
                             </div>
 
                             <h3>
-                                Total: ₹{order.total_price}
+                                Total: ₹
+                                {order.total_price}
                             </h3>
+
+                            {order.status ===
+                                "Pending" && (
+                                    <div className="order-actions">
+                                        <button
+                                            className="cancel-order-btn"
+                                            onClick={() => handleCancel(order.id)}
+                                        >
+                                            Cancel Order
+                                        </button>
+                                    </div>
+                                )}
                         </div>
                     ))}
                 </div>

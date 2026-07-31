@@ -56,3 +56,50 @@
     margin:4px 0;
     color:#666;
 }
+
+.cancel-order-btn {
+    margin-top: 16px;
+    padding: 10px 18px;
+    background: #e53935;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-block;
+    width: fit-content;
+}
+
+.cancel-order-btn:hover {
+    background: #c62828;
+}
+
+.status.pending {
+    color: orange;
+    font-weight: 600;
+}
+
+.status.processing {
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.status.shipped {
+    color: #7b1fa2;
+    font-weight: 600;
+}
+
+.status.delivered {
+    color: green;
+    font-weight: 600;
+}
+
+.status.cancelled {
+    color: red;
+    font-weight: 600;
+}
+.order-actions {
+    margin-top: 15px;
+}

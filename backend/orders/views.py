@@ -48,9 +48,7 @@ class CheckoutView(APIView):
 
         if not cart_items.exists():
             return Response(
-                {
-                    "message": "Cart is empty."
-                },
+                {"message": "Cart is empty."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -84,4 +82,38 @@ class CheckoutView(APIView):
         return Response(
             serializer.data,
             status=status.HTTP_201_CREATED,
+        )
+
+
+class CancelOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+
+        try:
+            order = Order.objects.get(
+                id=pk,
+                user=request.user
+            )
+        except Order.DoesNotExist:
+            return Response(
+                {"message": "Order not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if order.status != "Pending":
+            return Response(
+                {
+                    "message":
+                    "Only pending orders can be cancelled."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        order.status = "Cancelled"
+        order.save()
+
+        return Response(
+            OrderSerializer(order).data,
+            status=status.HTTP_200_OK,
         )
