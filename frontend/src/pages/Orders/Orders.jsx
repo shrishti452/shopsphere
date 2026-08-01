@@ -32,15 +32,11 @@ const Orders = () => {
 
             setOrders((prev) =>
                 prev.map((order) =>
-                    order.id === id
-                        ? updatedOrder
-                        : order
+                    order.id === id ? updatedOrder : order
                 )
             );
 
-            toast.success(
-                "Order cancelled successfully."
-            );
+            toast.success("Order cancelled successfully.");
         } catch (err) {
             console.error(err);
 
@@ -69,15 +65,27 @@ const Orders = () => {
                 </h2>
             ) : (
                 <div className="orders-container">
-                    {orders.map((order) => (
+                    {orders.map((order, index) => (
                         <div
                             className="order-card"
                             key={order.id}
                         >
                             <div className="order-header">
-                                <h2>
-                                    Order #{order.id}
-                                </h2>
+                                <div>
+                                    <h2>
+                                        Order #ORD-
+                                        {String(
+                                            orders.length - index
+                                        ).padStart(4, "0")}
+                                    </h2>
+
+                                    <p>
+                                        Date:{" "}
+                                        {new Date(
+                                            order.created_at
+                                        ).toLocaleDateString()}
+                                    </p>
+                                </div>
 
                                 <span
                                     className={`status ${order.status.toLowerCase()}`}
@@ -86,68 +94,43 @@ const Orders = () => {
                                 </span>
                             </div>
 
-                            <p>
-                                Date:{" "}
-                                {new Date(
-                                    order.created_at
-                                ).toLocaleDateString()}
-                            </p>
-
                             <div className="order-items">
-                                {(order.items || [])
-                                    .length > 0 ? (
-                                    order.items.map(
-                                        (item) => (
-                                            <div
-                                                className="order-item"
-                                                key={
-                                                    item.id
+                                {(order.items || []).length > 0 ? (
+                                    order.items.map((item) => (
+                                        <div
+                                            className="order-item"
+                                            key={item.id}
+                                        >
+                                            <img
+                                                src={
+                                                    item.product.image
                                                 }
-                                            >
-                                                <img
-                                                    src={
-                                                        item
-                                                            .product
-                                                            .image
-                                                    }
-                                                    alt={
-                                                        item
-                                                            .product
+                                                alt={
+                                                    item.product.title
+                                                }
+                                            />
+
+                                            <div>
+                                                <h4>
+                                                    {
+                                                        item.product
                                                             .title
                                                     }
-                                                />
+                                                </h4>
 
-                                                <div>
-                                                    <h4>
-                                                        {
-                                                            item
-                                                                .product
-                                                                .title
-                                                        }
-                                                    </h4>
+                                                <p>
+                                                    Qty:{" "}
+                                                    {item.quantity}
+                                                </p>
 
-                                                    <p>
-                                                        Qty:{" "}
-                                                        {
-                                                            item.quantity
-                                                        }
-                                                    </p>
-
-                                                    <p>
-                                                        ₹
-                                                        {
-                                                            item.price
-                                                        }
-                                                    </p>
-                                                </div>
+                                                <p>
+                                                    ₹{item.price}
+                                                </p>
                                             </div>
-                                        )
-                                    )
+                                        </div>
+                                    ))
                                 ) : (
-                                    <p>
-                                        No items
-                                        found.
-                                    </p>
+                                    <p>No items found.</p>
                                 )}
                             </div>
 
@@ -158,15 +141,19 @@ const Orders = () => {
 
                             {order.status ===
                                 "Pending" && (
-                                    <div className="order-actions">
-                                        <button
-                                            className="cancel-order-btn"
-                                            onClick={() => handleCancel(order.id)}
-                                        >
-                                            Cancel Order
-                                        </button>
-                                    </div>
-                                )}
+                                <div className="order-actions">
+                                    <button
+                                        className="cancel-order-btn"
+                                        onClick={() =>
+                                            handleCancel(
+                                                order.id
+                                            )
+                                        }
+                                    >
+                                        Cancel Order
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
