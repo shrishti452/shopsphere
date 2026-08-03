@@ -1,13 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://shopsphere-backend-y3jo.onrender.com/api/",
+    baseURL: "http://127.0.0.1:8000/api/",
     headers: {
         "Content-Type": "application/json",
     },
 });
 
-// Request Interceptor
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("access");
 
@@ -18,7 +17,6 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// Response Interceptor
 api.interceptors.response.use(
     (response) => response,
 
